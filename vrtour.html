@@ -1,0 +1,380 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>CBDI Liberty Virtual Tour</title>
+  <meta name="description" content="A Tour of Children's Hospital Liberty Campus'">
+  <meta name="viewport" content="width=device-width">
+  <link rel="shortcut icon" href="images/ui/favicon.ico">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
+  <script src="https://npmcdn.com/aframe-animation-component@3.0.1"></script>
+  <script src="https://npmcdn.com/aframe-event-set-component@3.0.1"></script>
+  <script src="https://npmcdn.com/aframe-layout-component@3.0.1"></script>
+  <script src="https://npmcdn.com/aframe-template-component@3.1.1"></script>
+  <!-- My scripts -->
+  <link rel="stylesheet" href="css/tour.css">
+  <script type="text/javascript" src="js/data.js"></script>
+  <script type="text/javascript" src="js/manager.js"></script>
+  <script type="text/javascript" src="js/call-switch.js"></script>
+  <script type="text/javascript" src="js/change-map.js"></script>
+  <script type="text/javascript" src="js/parameters.js"></script>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108453755-2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-108453755-2');
+  </script>
+</head>
+
+<body>
+  <a-scene manager vr-mode-ui="enabled: false" cursor="rayOrigin: mouse">
+    <a-assets>
+      <!-- Robbie Model 
+      <a-asset-item id="robbie_head-obj" src="robbie_obj/head.obj"></a-asset-item>
+      <a-asset-item id="robbie_head-mtl" src="robbie_obj/head.mtl"></a-asset-item>
+      <a-asset-item id="robbie_body-obj" src="robbie_obj/body.obj"></a-asset-item>
+      <a-asset-item id="robbie_body-mtl" src="robbie_obj/body.mtl"></a-asset-item>
+      <a-asset-item id="robbie_arm_left-obj" src="robbie_obj/arm_left.obj"></a-asset-item>
+      <a-asset-item id="robbie_arm_left-mtl" src="robbie_obj/arm_left.mtl"></a-asset-item>
+      <a-asset-item id="robbie_arm_right-obj" src="robbie_obj/arm_right.obj"></a-asset-item>
+      <a-asset-item id="robbie_arm_right-mtl" src="robbie_obj/arm_right.mtl"></a-asset-item>
+      <a-asset-item id="robbie_eye_holder-obj" src="robbie_obj/eye_holder.obj"></a-asset-item>
+      <a-asset-item id="robbie_eye_holder-mtl" src="robbie_obj/eye_holder.mtl"></a-asset-item>
+      <a-asset-item id="robbie_eye_inside-obj" src="robbie_obj/eye_inside.obj"></a-asset-item>
+      <a-asset-item id="robbie_eye_inside-mtl" src="robbie_obj/eye_inside.mtl"></a-asset-item>
+      <a-asset-item id="robbie_eye_len_right-obj" src="robbie_obj/eye_len_right.obj"></a-asset-item>
+      <a-asset-item id="robbie_eye_len_right-mtl" src="robbie_obj/eye_len_right.mtl"></a-asset-item> 
+      -->
+
+      <!-- 2D Images -->
+      <img id="map_outside2D" src="images/map/map_outside.png"> <!-- Dimensions 1757 X 1206 -->
+      <img id="map_cbdi1F_all2D" src="images/map/map_cbdi1F_all.png"> <!-- Dimensions 1187 X 884 -->
+      <img id="map_childrens2D" src="images/map/map_cbdi1F_childrens.png"> <!-- Dimensions 1040 X 578 -->
+      <img id="map_uc2D" src="images/map/map_cbdi1F_UC.png"> <!-- Dimensions 789 X 768 -->
+      <img id="map_cbdi2F2D" src="images/map/map_cbdi2F.png"> <!-- Dimensions 713 X 529 -->
+      <img id="map_cyclotron2D" src="images/map/map_cyclotron.png"> <!-- Dimensions 1342 X 823 -->
+      <img id="map_main1F2D" src="images/map/map_main1F.png"> <!-- Dimensions 942 X 574 -->
+      <img id="map_main4F2D" src="images/map/map_main4F.png"> <!-- Dimensions 1187 X 844 -->
+      <img id="location2D" src="images/map/location.png"> <!-- Dimensions 40 X 28 -->
+      <img id="current2D" src="images/map/current_location.png"> <!-- Dimensions 81 X 45 -->
+      <img id="talk_bubble2D" src="images/ui/talk_bubble.png"> <!-- Dimensions 600 X 435 -->
+    </a-assets>
+
+    <!-- Sphere entity template -->
+    <script id="sphereTemplate" type="text/html">
+      <a-entity id="${id}" class="sphere collidable" position="0 -200 0" geometry="primitive: sphere; radius: 4;" material="color:#CA5699"
+        event-set__1="_event: mousedown; material.color:#CA5699"
+        event-set__2="_event: mouseup; material.color: #00AAC8" 
+        event-set__3="_event: mouseenter; material.color: #00AAC8"
+        event-set__4="_event: mouseleave; material.color:#CA5699"></a-entity>
+    </script>
+
+    <!-- Map Button entity template -->
+    <script id="mapButtonTemplate" type="text/html">
+      <a-image class="mapButton collidable ${to}" geometry="height: 0.28; width: 0.4;" material="color: white"
+        src="#location2D"
+        event-set__1="_event: mousedown; material.color: white"
+        event-set__2="_event: mouseup; material.color: #00AAC8" 
+        event-set__3="_event: mouseenter; material.color: #00AAC8"
+        event-set__4="_event: mouseleave; material.color: white"
+        call-switch="to: ${to}"></a-image>
+    </script>
+
+    <!-- Map Switrch Button entity template -->
+    <script id="mapSwitchTemplate" type="text/html">
+      <a-image class="collidable" geometry="height: 2; width: 3;" material="color: white"
+        src="${src}"
+        event-set__1="_event: mousedown; material.color: white"
+        event-set__2="_event: mouseup; material.color: blue" 
+        event-set__3="_event: mouseenter; material.color: blue"
+        event-set__4="_event: mouseleave; material.color: white"
+        change-map="to: ${to}"></a-image>
+    </script>
+
+    <!-- Outside Sphere Entities -->
+    <!-- In manager.js the init function finds all of the spheres and assigns an event that calls switchBySphere(id) -->
+    <a-entity id="spheres">
+      <a-entity template="src: #sphereTemplate" data-id="s0"></a-entity>
+      <a-entity template="src: #sphereTemplate" data-id="s1"></a-entity>
+      <a-entity template="src: #sphereTemplate" data-id="s2"></a-entity>
+      <a-entity template="src: #sphereTemplate" data-id="s3"></a-entity>
+      <a-entity template="src: #sphereTemplate" data-id="s4"></a-entity>
+      <a-entity template="src: #sphereTemplate" data-id="s5"></a-entity>
+      <a-entity template="src: #sphereTemplate" data-id="s6"></a-entity>
+      <a-entity template="src: #sphereTemplate" data-id="s7"></a-entity>
+      <a-entity template="src: #sphereTemplate" data-id="s8"></a-entity>
+      <a-entity template="src: #sphereTemplate" data-id="s9"></a-entity>
+    </a-entity>
+
+    <!-- 360-degree image. -->
+    <a-sky id="image-360" radius="105"></a-sky>
+
+    <a-entity id="player" position="0 2 0" rotation="0 0 0">
+      <a-entity id="mainCamera" camera look-controls mouse-cursor wasd-controls>
+        <!-- Cursor 
+        <a-entity position="0 0 -3"
+                  scale="1 1 1"
+                  geometry="primitive: ring; radiusOuter: 0.06; radiusInner: 0.03; thetaStart: 90;"
+                  material="color: white; shader: flat"
+                  cursor="maxDistance: 100; fuse: true"
+                  raycaster="interval: 500; objects: .collidable">
+          <a-animation begin="click" easing="ease" attribute="geometry.thetaLength" fill="backwards" from="0" to="360" dur="500"></a-animation>
+          <a-animation begin="mouseleave" easing="ease" attribute="geometry.thetaLength" fill="backwards" to="360" dur="0"></a-animation>
+          <a-animation begin="cursor-fusing" easing="ease-in" attribute="geometry.thetaLength" fill="forwards" from="360" to="0"></a-animation>
+        </a-entity> -->
+
+            <!-- Outside Map -->
+        <a-entity id="outsideMapCollection" class="map" position="0 0 5" rotation="0 0 0" scale="0.5 0.5 0.5">
+          <a-plane id="outsidePlane" src="#map_outside2D" transparent="true" height="12.06" width="17.57"></a-plane>
+          <a-entity id="outsideButtons" position="0 0 0.1">
+            <a-entity template="src: #mapButtonTemplate" data-to="outside_mainEntrance" position="-5.19 1.99 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="outside_cdbiDoors" position="-0.38 2.93 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="Main_1F_Gates" position="-3.81 4.10 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="outside_sidewalk" position="-0.08 2.07 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="outside_g_entrance" position="-0.75 0.84 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="outside_flag" position="-1.65 2.5 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="outside_g_grass" position="-0.17 0.16 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="outside_g_ironStatue" position="1.85 -0.13 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="outside_g_redStatue" position="1.36 -0.57 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="outside_g_fork" position="1.2 -1.06 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="outside_g_chess" position="2.38 -1.14 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="outside_g_end" position="3.6 -1.53 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="outside_g_catStatue" position="4.32 -1.69 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="outside_g_greenStatue" position="3.74 -2.03 0"></a-entity> 
+          </a-entity>
+          <a-entity template="src: #mapSwitchTemplate" data-to="childrens" data-src="#map_childrens2D" position="3.5 3 0.1"></a-entity>
+          <a-entity template="src: #mapSwitchTemplate" data-to="main1F" data-src="#map_main1F2D" position="-6 5 0.1"></a-entity>
+        </a-entity>
+
+        <!-- Main Building 1st Floor Map -->
+        <a-entity id="main1FMapCollection" class="map" position="0 0 5" rotation="0 0 0" scale="0.75 0.75 0.75">
+          <a-plane id="main1FPlane" src="#map_main1F2D" transparent="true" height="5.74" width="9.42" ></a-plane>
+          <a-entity id="main1FButtons" position="0 0 0.1">
+            <a-entity template="src: #mapButtonTemplate" data-to="Main_1F_Desk" position="1.79 0.14 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="Main_1F_Lobby" position="1.03 -0.41 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="Main_1F_Gates" position="2.36 -0.12 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="Main_1F_Elevators" position="1.58 -0.77 0"></a-entity>
+          </a-entity>
+          <a-entity template="src: #mapSwitchTemplate" data-to="main4F" data-src="#map_main4F2D" position="-1 3 0.1"></a-entity>
+          <a-entity template="src: #mapSwitchTemplate" data-to="outside" data-src="#map_outside2D" position="3.5 -2 0.1"></a-entity>
+        </a-entity>
+        
+        <!-- Main Building 4th Floor Map -->
+        <a-entity id="main4FMapCollection" class="map" position="0 0 5" rotation="0 0 0" scale="0.75 0.75 0.75">
+          <a-plane id="main4FPlane" src="#map_main4F2D" transparent="true" height="8.44" width="11.87"></a-plane>
+          <a-entity id="main4FButtons" position="0 0 0.1">
+            <a-entity template="src: #mapButtonTemplate" data-to="Main_4F_Room10" position="-3.87 2.46 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="Main_4F_Room10Hallway" position="-3.03 2.73 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="Main_4F_Room06Hallway" position="-2.20 2.26 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="Main_4F_NurseStation" position="-0.87 1.55 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="Main_4F_StarDome" position="0.45 2.74 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="Main_4F_StarDomeHallway" position="1.2 1.2 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="Main_4F_BreakRoomHallway" position="0.66 0.66 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="Main_4F_BreakRoom" position="1.07 0.04 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="Main_4F_PlayRoom" position="0.36 -0.17 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="Main_4F_ElevatorLobby" position="2.14 -0.57 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="Main_4F_SpaceStation" position="1.10 -1.36 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="Main_4F_WaitingArea" position="3.68 0.18 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="Main_4F_Elevators" position="3.65 -1.50 0"></a-entity>
+          </a-entity>
+          <a-entity template="src: #mapSwitchTemplate" data-to="main1F" data-src="#map_main1F2D" position="5 -3 0.1"></a-entity>
+        </a-entity>
+
+        <!-- Main CBDI 2st Floor -->
+        <a-entity id="cbdi2FMapCollection" class="map" position="0 0 5" rotation="0 0 0" scale="0.75 0.75 0.75">
+          <a-plane id="cbdi2FPlane" src="#map_cbdi2F2D" transparent="true" height="5.78" width="10.40" ></a-plane>
+          <a-entity id="cbdi2FButtons" position="0 0 0.1">
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_2F_Circles" position="-2.29 1.25 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_2F_Desk1" position="-1.10 0.67 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_2F_Desk2" position="-0.40 0.85 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_2F_Elevators" position="-2.70 1.75 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_2F_HallMid" position="0.20 0.05 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_2F_KitchenHall" position="-0.18 0.26 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_2F_Kitchen" position="0.38 0.65 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_2F_NSTopLeft" position="1.31 -0.51 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_2F_RoomBedEnt" position="0.83 -0.67 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_2F_RoomBed" position="0.37 -0.39 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_2F_RoomChair" position="1.92 -0.17 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_2F_Stairs" position="-3.71 1.77 0"></a-entity>
+            <!--<a-entity template="src: #mapButtonTemplate" data-to="CBDI_2F_NSTopRight" position="2.22 -0.90 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_2F_NurseStation" position="0.76 -1.23 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_2F_NSBottomRight" position="0.24 1.88 0"></a-entity>-->
+          </a-entity>
+          <a-entity template="src: #mapSwitchTemplate" data-to="childrens" data-src="#map_childrens2D" position="-3 -2.5 0.1"></a-entity>
+        </a-entity>
+      
+        <!-- Main CBDI 1st Floor Children's Side Map -->
+        <a-entity id="childrensMapCollection" class="map" position="0 0 5" rotation="0 0 0" scale="0.75 0.75 0.75">
+          <a-plane id="childrensPlane" src="#map_childrens2D" transparent="true" height="5.78" width="10.40" ></a-plane>
+          <a-entity id="childrensButtons" position="0 0 0.1">
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_1F_Hallway1" position="-0.10 -0.29 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_1F_Hallway2" position="1.47 0.63 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_1F_Hallway3" position="-1.65 0.43 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_1F_Hallway4" position="-0.05 1.54 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_1F_Trees" position="-2.35 0.81 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_1F_Hallway5" position="1.47 -1.2 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_1F_Hallway6" position="3.04 -0.24 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_ChildrensControls" position="2.32 0.74 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_ChildrensEntrance" position="2.09 1.09 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_ChildrensHallway" position="1.57 1.47 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_Childrens" position="2.43 1.74 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_ChildrensBehind" position="2.77 1.93 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_ChildrensBack" position="3.27 1.21 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_ChildrensVeryBack" position="4.48 1.82 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="outside_mainEntrance" position="-3.53 1.68 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_1F_Dome" position="-2.57 -0.24 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_1F_Desk" position="-3.8 0.38 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_1F_Desk2" position="-3.33 0.06 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_1F_FamilyCenter" position="-4.31 -0.66 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_1F_FamilyCenter2" position="-3.76 -0.98 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_1F_Open" position="-3.73 0.85 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_1F_CampusInfo" position="-3.42 1.21 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_1F_Gates" position="-4.45 1.23 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_1F_Stairs" position="-4.1 1.68 0"></a-entity>
+          
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_CT-Scan" position="-0.15 -1.11 0"></a-entity>
+          </a-entity>
+          <a-entity template="src: #mapSwitchTemplate" data-to="uc" data-src="#map_uc2D" position="3 -2.5 0.1"></a-entity>
+          <a-entity template="src: #mapSwitchTemplate" data-to="cyclotron" data-src="#map_cyclotron2D" position="5 0 0.1"></a-entity>
+          <a-entity template="src: #mapSwitchTemplate" data-to="outside" data-src="#map_outside2D" position="-6 -1.5 0.1"></a-entity>
+          <a-entity template="src: #mapSwitchTemplate" data-to="cbdi2F" data-src="#map_cbdi2F2D" position="-3 3.5 0.1"></a-entity>
+        </a-entity>
+      
+        <!-- Main CBDI 1st Floor UC's Side Map -->
+        <a-entity id="ucMapCollection" class="map" position="0 0 5" rotation="0 0 0" scale="0.75 0.75 0.75">
+          <a-plane id="ucPlane" src="#map_uc2D" transparent="true" height="7.68" width="7.89" ></a-plane>
+          <a-entity id="ucButtons" position="0 0 0.1">
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_UC_Entrance" position="-0.22 -3.04 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_UC_FrontDesk" position="-0.79 -2.49 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_UC_Lobby" position="-0.95 -1.96 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_UC_Chairs" position="-1.37 -1.59 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_1F_Hallway7" position="-1.83 -1.07 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_1F_Hallway8" position="-0.1 -0.31 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_1F_Hallway5" position="1.52 0.65 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_1F_Hallway6" position="-1.31 0.47 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_UCEntrance" position="0.22 1.39 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_UCHallway" position="0.89 1.82 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_UC" position="0.37 2.18 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_UCBehind" position="1.83 2.64 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_UCBack" position="2.08 1.94 0"></a-entity>  
+          </a-entity>
+          <a-entity template="src: #mapSwitchTemplate" data-to="childrens" data-src="#map_childrens2D" position="-3 1.5 0.1"></a-entity>
+          <a-entity template="src: #mapSwitchTemplate" data-to="cyclotron" data-src="#map_cyclotron2D" position="4.5 0.5 0.1"></a-entity>
+          <a-entity template="src: #mapSwitchTemplate" data-to="outside" data-src="#map_outside2D" position="-3 -3 0.1"></a-entity>
+        </a-entity>
+      
+       <!-- Cyclotron Map -->
+       <a-entity id="cyclotronMapCollection" class="map" position="0 0 5" rotation="0 0 0" scale="0.75 0.75 0.75">
+         <a-plane id="cyclotronPlane" src="#map_cyclotron2D" transparent="true" height="8.23" width="13.42" ></a-plane>
+           <a-entity id="cyclotronButtons" position="0 0 0.1">
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_1F_Hallway4" position="-5.10 1.02 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_1F_Hallway2" position="-3.56 0.07 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_1F_Hallway6" position="-2.01 -0.84 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_1F_Hallway8" position="-0.66 -1.61 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_ChildrensBack" position="-1.80 0.7 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_ChildrensBehind" position="-1.96 1.41 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_ChildrensControls" position="-2.60 0.15 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_ChildrensEntrance" position="-2.92 0.55 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_ChildrensHallway" position="-3.43 0.93 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_Childrens" position="-2.64 1.19 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_ChildrensVeryBack" position="-0.62 1.32 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_EmptyBack" position="-3.48 1.83 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_EmptyHallway" position="-5.06 1.88 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_Empty" position="-4.18 2.14 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_UCBack" position="-0.25 -0.26 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_UCBehind" position="-0.38 0.48 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_UCEntrance" position="-1.32 -0.39 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_UCHallway" position="-1.81 -0.01 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_UC" position="-1.01 0.26 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Cyclotron_ControlEntrance" position="1.68 -2.85 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Cyclotron_ControlRoom" position="0.88 -2.97 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Cyclotron_Corner" position="5.01 -0.97 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Cyclotron_Doors" position="2.17 -3.25 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Cyclotron_End" position="-1.33 2.76 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Cyclotron_FirstDoor" position="4.70 -1.46 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Cyclotron_Hallway1" position="1.5 -2.18 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Cyclotron_Hallway2" position="1.86 -1.96 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Cyclotron_Hallway3" position="3.21 -2.54 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Cyclotron_HallwayEnd" position="4.13 -1.99 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Cyclotron_HallwayStart" position="2.56 -2.85 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Cyclotron" position="4.13 -1.54 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Cyclotron_Middle" position="1.71 1.08 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Cyclotron_OppositeSide" position="4 -0.81 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Cyclotron_Pump" position="3.09 -1.34 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Cyclotron_SecondDoor" position="3.80 -0.14 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Cyclotron_StairsBottem" position="3.67 -1.74 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Cyclotron_StairsTop" position="3.12 -1.97 0"></a-entity>
+            
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_Research" position="0.58 -0.63 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_ResearchBack" position="1.22 -0.45 0"></a-entity>
+            <!-- Add to data.js
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_ResearchCorner" position="-0.19 -0.92 0"></a-entity>
+            <a-entity template="src: #mapButtonTemplate" data-to="CBDI_Gantry_ResearchEntrance" position="0.32 -1.32 0"></a-entity> -->
+          </a-entity>
+          <a-entity template="src: #mapSwitchTemplate" data-to="childrens" data-src="#map_childrens2D" position="-5 -1.5 0.1"></a-entity>
+          <a-entity template="src: #mapSwitchTemplate" data-to="uc" data-src="#map_uc2D" position="-2.5 -3 0.1"></a-entity>
+        </a-entity>
+
+        <!-- Robbie (attached to the camera entity to be part of the HUD
+        <a-entity id="robbieModel" position="15 -0.5 -8" rotation="0 -30 0" scale="0.1 0.1 0.1">
+          <a-entity id="robbie_head-model" obj-model="obj: #robbie_head-obj; mtl: #robbie_head-mtl" position="0 0 0"></a-entity>
+          <a-entity id="robbie_body-model" obj-model="obj: #robbie_body-obj; mtl: #robbie_body-mtl" position="0 0 0"></a-entity>
+          <a-entity id="robbie_arm_left-model" obj-model="obj: #robbie_arm_left-obj; mtl: #robbie_arm_left-mtl" position="0 0 0"></a-entity>
+          <a-entity id="robbie_arm_right-model" obj-model="obj: #robbie_arm_right-obj; mtl: #robbie_arm_right-mtl" position="0 0 0"></a-entity>
+          <a-entity id="left_eye">
+            <a-entity id="robbie_eye_holder-model" obj-model="obj: #robbie_eye_holder-obj; mtl: #robbie_eye_holder-mtl" position="0 0 0"></a-entity>
+            <a-entity id="robbie_eye_inside-model" obj-model="obj: #robbie_eye_inside-obj; mtl: #robbie_eye_inside-mtl" position="0 0 0"></a-entity>
+            <a-entity id="robbie_eye_len_right-model" obj-model="obj: #robbie_eye_len_right-obj; mtl: #robbie_eye_len_right-mtl" position="0 0 0"></a-entity>
+          </a-entity>
+          <a-entity id="right_eye" position="-139 42 0" rotation="0 0 180">
+            <a-entity id="robbie_eye_holder-model" obj-model="obj: #robbie_eye_holder-obj; mtl: #robbie_eye_holder-mtl" position="0 0 0"></a-entity>
+            <a-entity id="robbie_eye_inside-model" obj-model="obj: #robbie_eye_inside-obj; mtl: #robbie_eye_inside-mtl" position="0 0 0"></a-entity>
+            <a-entity id="robbie_eye_len_right-model" obj-model="obj: #robbie_eye_len_right-obj; mtl: #robbie_eye_len_right-mtl" position="0 0 0"></a-entity>
+          </a-entity>
+          <a-animation attribute="position" dur="5000" direction="alternate" fill="forwards" to="15 0.5 -8" repeat="indefinite"></a-animation>
+        </a-entity>
+        -->
+
+      </a-entity>
+    </a-entity>
+  </a-scene>
+
+  <!-- Tour UI -->
+  <div id="tourUI">
+    <div id="robbie">
+      <img id="robbieImg" src="images/ui/robbie_img.png">
+      <div id="robbieText">You are at This Place</div>
+    </div>
+    <div id="tourNav" style="display: inline">
+      <img id="rightArrow" src="images/ui/menu_information.png" onClick=""></img>
+      <div id="locationText">You are Here</div>
+      <img id="leftArrow" src="images/ui/menu_information.png" onClick=""></img>
+    </div>
+    <div id="bottomButtons">
+      <img src="images/ui/map_icon.png" id="menu_map" class="uiButton" alt="Map" onClick="clickMapButton()"> <!-- 95 x 97 -->
+      <img src="images/ui/robbie.png" id="menu_robbie" class="uiButton" onClick="toggleRobbie()"> <!-- 94 x 94 -->
+      <img src="images/ui/menu_vr.png" id="menu_vr" class="uiButton" onClick="customEnterVR()"> <!-- 48 x 48 -->
+      <img src="images/ui/menu_sound_on.png" id="menu_sound" class="uiButton" onClick="clickSoundButton()"> <!-- 48 x 48 -->
+      <img src="images/ui/menu_information.png" id="menu_home" class="uiButton" onClick="clickScriptButton()"> <!-- 48 x 48 -->
+    </div>
+  </div>
+
+  <script>
+  var toggleRobbie = function() {
+    var robbieElement = document.getElementById("robbie");
+    if (robbieElement.style.display === 'none') {
+      robbieElement.style.display = 'inline';
+    } else {
+      robbieElement.style.display = 'none';
+    }
+  }
+  
+  </script>
+
+</body>
+</html>

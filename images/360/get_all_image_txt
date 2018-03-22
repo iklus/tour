@@ -1,0 +1,5 @@
+#!bin/bash/
+
+ls | grep .*jpg$ >> temp.txt
+sed 's/$/ /' temp.txt >> all_images.txt
+rm temp.txt
