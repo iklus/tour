@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>CBDI Liberty Virtual Tour</title>
+  <meta name="description" content="A Tour of Children's Hospital Liberty Campus'">
+  <meta name="viewport" content="width=device-width">
+  <link rel="shortcut icon" href="images/ui/favicon.ico">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
+  <script src="https://npmcdn.com/aframe-animation-component@3.0.1"></script>
+  <script src="https://npmcdn.com/aframe-event-set-component@3.0.1"></script>
+  <script src="https://npmcdn.com/aframe-layout-component@3.0.1"></script>
+  <script src="https://npmcdn.com/aframe-template-component@3.1.1"></script>
+  <!-- My scripts -->
+  <link rel="stylesheet" href="css/index.css">
+  <script type="text/javascript" src="js/splashpage.js"></script>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108453755-2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-108453755-2');
+  </script>
+</head>
+
+<body>
+  <div id="splashPage">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-toggleable-md fixed-top">
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="material-icons nav-menu">menu</i>
+      </button>
+      <a class="navbar-brand" href="#"><img src="images/splashpage/childrens-logo.png" alt="Children's Hospital"></a>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="tours.html">Tours</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="custom.html">Custom</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Loading Bar Filler -->
+    <div class="container info">
+      <div id="loadingArea" class="row">
+        <div class="dark-text col-lg-2">
+          <h1>Loading</h1>
+        </div>
+        <div class="col-lg-10">
+          <div class="progress">
+            <div id="bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 20%">20%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Custom Tour -->
+      <div class="row featurette">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+          <h2 class="dark-text featurette-heading">Create a Custom Tour</h2>
+          <p id="test" class="lead">Create your own custom tour to share with friends and family.  First select your starting position and then select all of the spots you would like along your tour.</p>
+        </div>
+        <div class="col-md-1"></div>
+      </div>
+
+
+      <!-- Created based on JSON data in data.js -->
+      <form id="cbForm">
+        <div class="col-lg-12 text-center">
+          <button type="button" class="btn btn-info" onClick="createSelections('radio')">Create Custom Tour Link</button>
+        </div>
+      </form> 
+
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <p> </p>
+          <p id=linkArea></p>
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <!-- /END THE FEATURETTES -->
+
+      <!-- Footer -->
+      <footer>
+        <p class="float-right"><a href="#">Back to Top</a></p>
+      </footer>
+
+    </div><!-- /.container -->
+  </div><!-- splashpage -->
+
+   <!-- BootStrap placed at the end of the document so the pages load faster -->
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+</body>
+</html>

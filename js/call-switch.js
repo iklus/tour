@@ -14,8 +14,24 @@ AFRAME.registerComponent('call-switch', {
   init: function() {
     var data = this.data;
     var el = this.el;
+
+    var mouseEnter = function() {
+      var name = document.querySelector('a-scene').components.manager.data.json[data.to]['name'];
+      document.getElementById('mapTitle').setAttribute('text', 'value', name);
+    }
+
+    var mouseLeave = function() {
+      var activeMap = document.querySelector('a-scene').components.manager.data.activeMap;
+      document.getElementById('mapTitle').setAttribute('text', 'value', activeMap);
+    }
+
     el.addEventListener(data.on, function() {
       document.querySelector('a-scene').components.manager.switchById(data.to);
     });
+
+    el.addEventListener("mouseenter", function() { mouseEnter(); });
+    el.addEventListener("mouseleave", function() { mouseLeave(); });
+    el.addEventListener("mouseup", function() { mouseEnter(); });
+    el.addEventListener("mousedown", function() { mouseLeave(); });
   }
 });

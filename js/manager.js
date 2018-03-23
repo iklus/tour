@@ -14,14 +14,15 @@ AFRAME.registerComponent('manager', {
     on: {type: 'string', default: 'click'},
     current: {type: 'string', default: 'outside_mainEntrance'},
     sky: {type: 'selector'},
-    dur: {type: 'number', default: 400},
+    dur: {type: 'number', default: 1000},
     locations: {type: 'array'},
     spheres: {type: 'array'},
     maps: {type: 'map'},
-    mapVisible: {type: 'bool', default: false},
+    activeMap: {type: 'string', default: 'none'},
     scriptVisible: {type: 'bool', default: true},
     json: {type: 'map'},
     tour: {type: 'array'},
+    tourKeys: {type: 'map', default: {'id': "scene"}},
     hide: {type: 'map', default: {'x': 0, 'y': -200, 'z': 0}},
     mute: {type: 'bool', default: false},
     audio: {},
@@ -39,6 +40,14 @@ AFRAME.registerComponent('manager', {
     for (var i = 0; i < data.spheres.length; i++) {
       data.spheres[i].addEventListener(data.on, function() {
         document.querySelector('a-scene').components.manager.switchBySphere(this.id);
+      });
+      data.spheres[i].addEventListener("mouseenter", function() {
+        var num = this.id.replace( /^\D+/g, '');
+        document.getElementById('t'+num).setAttribute('visible', true);
+      });
+      data.spheres[i].addEventListener("mouseleave", function() {
+        var num = this.id.replace( /^\D+/g, '');
+        document.getElementById('t'+num).setAttribute('visible', false);
       });
     }
 
@@ -60,6 +69,8 @@ AFRAME.registerComponent('manager', {
     if(data.tour != null) {
       for(var key in data.json) {
           if(data.tour.includes(data.json[key]["id"])) {
+            console.log(data.json[key]["id"]);
+            data.tourKeys[data.json[key]["id"]] = key;
         } else {
           var mapButtons = document.getElementsByClassName(key);
           for (var i=0; i < mapButtons.length; i++) {
@@ -100,6 +111,8 @@ AFRAME.registerComponent('manager', {
       if(data.tour == null || data.tour.includes(data.json[connect]["id"])) {
         data.locations[i] = connect;
         data.spheres[i].setAttribute('position', connections[connect]);
+        // Changes text above sphere
+        document.getElementById('t'+i).setAttribute('text', 'value', data.json[connect]["name"]);
       }
       i++;
       // Switches Script
@@ -122,25 +135,45 @@ AFRAME.registerComponent('manager', {
     });
   },
 
+  tourStep: function(direction) {
+    var data = this.data;
+    var el = this.el;
+
+    var currentID = data.json[data.current]["id"];
+    var index = data.tour.indexOf(currentID);
+    if (index === -1) {index = 0;}
+    if (direction === 'previous') {
+      index-=1;
+      if (index < 0) {index = 0;}
+      this.switchById(data.tourKeys[data.tour[index]]);
+    } else if (direction === 'next') {
+      index+=1;
+      if (index >= data.tour.length) {index = data.tour.length-1;}
+      this.switchById(data.tourKeys[data.tour[index]]);
+    }
+  },
+
   changeMap: function(mapArea) {
     var data = this.data;
     var el = this.el;
     // If the function doesn't have a input it toggles the map for the current location
     if (mapArea == null) {
-      if (data.mapVisible) {
+      if (data.activeMap != 'none') {
         this.hideMap();
+        return;
       } else {
-        activeMap = "#" + data.json[data.current]['area'] + "MapCollection";
-        el.sceneEl.querySelector(activeMap).setAttribute('position', { "x": 0, "y": 0, "z": -5});
-        data.mapVisible = true;
+        mapArea = data.json[data.current]['area'];
+        var mapID = "#" + mapArea + "MapCollection";
       }
     } else {
       // Switch to map given in input
       this.hideMap();
-      activeMap = "#" + mapArea + "MapCollection";
-      el.sceneEl.querySelector(activeMap).setAttribute('position', { "x": 0, "y": 0, "z": -5});
-      data.mapVisible = true;
+      var mapID = "#" + mapArea + "MapCollection";
     }
+    el.sceneEl.querySelector(mapID).setAttribute('position', { "x": 0, "y": 0, "z": -5});
+    document.getElementById('mapTitle').setAttribute('position', { "x": 0, "y": 3.6, "z": -5})
+    document.getElementById('mapTitle').setAttribute('text', 'value', mapArea);
+    data.activeMap = mapArea;
   },
 
   hideMap: function() {
@@ -149,13 +182,13 @@ AFRAME.registerComponent('manager', {
     var tempMap = "";
     // REPLACE: generate map list from json.
     var mapList = ["outside", "main1F", "main4F", "cbdi2F", "childrens", "uc", "cyclotron"];    
-    var activeMap = "#" + data.json[data.current]['area'] + "MapCollection";
     for (var i = 0; i < mapList.length; i++) {
       el.sceneEl.querySelector("#" + mapList[i] + "MapCollection").setAttribute('position', { "x": 0, "y": 0, "z": 5});
     }
+    document.getElementById('mapTitle').setAttribute('position', { "x": 0, "y": 3.6, "z": 5});
     //var activeMap = "#" + data.json[data.current]['area'] + "MapCollection";
     //el.sceneEl.querySelector(activeMap).setAttribute('position', { "x": 0, "y": 0, "z": 5});
-    data.mapVisible = false;
+    data.activeMap = 'none';
   },
 
   // Changes the sky image
@@ -212,6 +245,8 @@ AFRAME.registerComponent('manager', {
         this.playSound();
       }
       document.getElementById("robbieText").innerHTML = script;
+      document.getElementById("locationText").innerHTML = data.json[data.current]['name'];
+      // For Debug --- document.getElementById("locationText").innerHTML = 'Id: ' + data.json[data.current]['id'];
     }
   },
 

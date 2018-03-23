@@ -12,6 +12,7 @@
   <script src="https://npmcdn.com/aframe-event-set-component@3.0.1"></script>
   <script src="https://npmcdn.com/aframe-layout-component@3.0.1"></script>
   <script src="https://npmcdn.com/aframe-template-component@3.1.1"></script>
+  <script src="https://unpkg.com/aframe-look-at-component@0.5.1/dist/aframe-look-at-component.min.js"></script>
   <!-- My scripts -->
   <link rel="stylesheet" href="css/tour.css">
   <script type="text/javascript" src="js/data.js"></script>
@@ -19,6 +20,7 @@
   <script type="text/javascript" src="js/call-switch.js"></script>
   <script type="text/javascript" src="js/change-map.js"></script>
   <script type="text/javascript" src="js/parameters.js"></script>
+  <script type="text/javascript" src="js/tour_ui.js"></script>
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108453755-2"></script>
@@ -67,11 +69,14 @@
 
     <!-- Sphere entity template -->
     <script id="sphereTemplate" type="text/html">
-      <a-entity id="${id}" class="sphere collidable" position="0 -200 0" geometry="primitive: sphere; radius: 4;" material="color:#CA5699"
-        event-set__1="_event: mousedown; material.color:#CA5699"
-        event-set__2="_event: mouseup; material.color: #00AAC8" 
-        event-set__3="_event: mouseenter; material.color: #00AAC8"
-        event-set__4="_event: mouseleave; material.color:#CA5699"></a-entity>
+      <a-entity id="${id}" class="sphere" position="0 -200 0" look-at="[camera]">
+        <a-entity class="collidable" position="0 0 0" geometry="primitive: sphere; radius: 4;" material="color:#CA5699"
+          event-set__colorDown="_event: mousedown; material.color:#CA5699"
+          event-set__colorUp="_event: mouseup; material.color: #00AAC8" 
+          event-set__colorEnter="_event: mouseenter; material.color: #00AAC8"
+          event-set__colorLeave="_event: mouseleave; material.color:#CA5699"></a-entity> 
+        <a-entity id="${text}" text="value: Location; color: #CA5699; align: center; wrapCount: 10; zOffset: 1" position="0 12 0" visible="false" geometry="primitive: plane; height: 10; width: 20" material="color: white;"></a-entity>
+      </a-entity>
     </script>
 
     <!-- Map Button entity template -->
@@ -99,16 +104,16 @@
     <!-- Outside Sphere Entities -->
     <!-- In manager.js the init function finds all of the spheres and assigns an event that calls switchBySphere(id) -->
     <a-entity id="spheres">
-      <a-entity template="src: #sphereTemplate" data-id="s0"></a-entity>
-      <a-entity template="src: #sphereTemplate" data-id="s1"></a-entity>
-      <a-entity template="src: #sphereTemplate" data-id="s2"></a-entity>
-      <a-entity template="src: #sphereTemplate" data-id="s3"></a-entity>
-      <a-entity template="src: #sphereTemplate" data-id="s4"></a-entity>
-      <a-entity template="src: #sphereTemplate" data-id="s5"></a-entity>
-      <a-entity template="src: #sphereTemplate" data-id="s6"></a-entity>
-      <a-entity template="src: #sphereTemplate" data-id="s7"></a-entity>
-      <a-entity template="src: #sphereTemplate" data-id="s8"></a-entity>
-      <a-entity template="src: #sphereTemplate" data-id="s9"></a-entity>
+      <a-entity template="src: #sphereTemplate" data-id="s0" data-text="t0" data-textID="#t0"></a-entity>
+      <a-entity template="src: #sphereTemplate" data-id="s1" data-text="t1" data-textID="#t1"></a-entity>
+      <a-entity template="src: #sphereTemplate" data-id="s2" data-text="t2" data-textID="#t2"></a-entity>
+      <a-entity template="src: #sphereTemplate" data-id="s3" data-text="t3" data-textID="#t3"></a-entity>
+      <a-entity template="src: #sphereTemplate" data-id="s4" data-text="t4" data-textID="#t4"></a-entity>
+      <a-entity template="src: #sphereTemplate" data-id="s5" data-text="t5" data-textID="#t5"></a-entity>
+      <a-entity template="src: #sphereTemplate" data-id="s6" data-text="t6" data-textID="#t6"></a-entity>
+      <a-entity template="src: #sphereTemplate" data-id="s7" data-text="t7" data-textID="#t7"></a-entity>
+      <a-entity template="src: #sphereTemplate" data-id="s8" data-text="t8" data-textID="#t8"></a-entity>
+      <a-entity template="src: #sphereTemplate" data-id="s9" data-text="t9" data-textID="#t9"></a-entity>
     </a-entity>
 
     <!-- 360-degree image. -->
@@ -129,6 +134,8 @@
         </a-entity> -->
 
             <!-- Outside Map -->
+      <a-entity id="allMaps" position="0 -0.5 0" scale="0.9 0.9 0.9">
+        <a-entity id="mapTitle" text="value: Map; color: #CA5699; align: center; wrapCount: 10; zOffset: 0.1" position="0 3.6 5" geometry="primitive: plane; height: 1.5; width: 3" material="color: white;"></a-entity>>
         <a-entity id="outsideMapCollection" class="map" position="0 0 5" rotation="0 0 0" scale="0.5 0.5 0.5">
           <a-plane id="outsidePlane" src="#map_outside2D" transparent="true" height="12.06" width="17.57"></a-plane>
           <a-entity id="outsideButtons" position="0 0 0.1">
@@ -319,6 +326,7 @@
           <a-entity template="src: #mapSwitchTemplate" data-to="childrens" data-src="#map_childrens2D" position="-5 -1.5 0.1"></a-entity>
           <a-entity template="src: #mapSwitchTemplate" data-to="uc" data-src="#map_uc2D" position="-2.5 -3 0.1"></a-entity>
         </a-entity>
+      </a-entity> <!-- End of allMaps -->
 
         <!-- Robbie (attached to the camera entity to be part of the HUD
         <a-entity id="robbieModel" position="15 -0.5 -8" rotation="0 -30 0" scale="0.1 0.1 0.1">
@@ -351,30 +359,18 @@
       <div id="robbieText">You are at This Place</div>
     </div>
     <div id="tourNav" style="display: inline">
-      <img id="rightArrow" src="images/ui/menu_information.png" onClick=""></img>
+      <img id="rightArrow" src="images/ui/menu_information.png" onClick="document.querySelector('a-scene').components.manager.tourStep('next')"></img>
       <div id="locationText">You are Here</div>
-      <img id="leftArrow" src="images/ui/menu_information.png" onClick=""></img>
+      <img id="leftArrow" src="images/ui/menu_information.png" onClick="document.querySelector('a-scene').components.manager.tourStep('previous')"></img>
     </div>
     <div id="bottomButtons">
-      <img src="images/ui/map_icon.png" id="menu_map" class="uiButton" alt="Map" onClick="clickMapButton()"> <!-- 95 x 97 -->
+      <img src="images/ui/map_icon.png" id="menu_map" class="uiButton" alt="Map" onClick="document.querySelector('a-scene').components.manager.changeMap()"> <!-- 95 x 97 -->
       <img src="images/ui/robbie.png" id="menu_robbie" class="uiButton" onClick="toggleRobbie()"> <!-- 94 x 94 -->
       <img src="images/ui/menu_vr.png" id="menu_vr" class="uiButton" onClick="customEnterVR()"> <!-- 48 x 48 -->
       <img src="images/ui/menu_sound_on.png" id="menu_sound" class="uiButton" onClick="clickSoundButton()"> <!-- 48 x 48 -->
-      <img src="images/ui/menu_information.png" id="menu_home" class="uiButton" onClick="clickScriptButton()"> <!-- 48 x 48 -->
+      <a href="index.html"><img src="images/ui/menu_information.png" id="menu_home" class="uiButton"></a> <!-- 48 x 48 -->
     </div>
   </div>
-
-  <script>
-  var toggleRobbie = function() {
-    var robbieElement = document.getElementById("robbie");
-    if (robbieElement.style.display === 'none') {
-      robbieElement.style.display = 'inline';
-    } else {
-      robbieElement.style.display = 'none';
-    }
-  }
-  
-  </script>
 
 </body>
 </html>

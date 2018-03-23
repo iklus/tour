@@ -1,0 +1,150 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>CBDI Liberty Virtual Tour</title>
+  <meta name="description" content="A Tour of Children's Hospital Liberty Campus'">
+  <meta name="viewport" content="width=device-width">
+  <link rel="shortcut icon" href="images/ui/favicon.ico">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
+  <script src="https://npmcdn.com/aframe-animation-component@3.0.1"></script>
+  <script src="https://npmcdn.com/aframe-event-set-component@3.0.1"></script>
+  <script src="https://npmcdn.com/aframe-layout-component@3.0.1"></script>
+  <script src="https://npmcdn.com/aframe-template-component@3.1.1"></script>
+  <!-- My scripts -->
+  <link rel="stylesheet" href="css/index.css">
+  <script type="text/javascript" src="js/splashpage.js"></script>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108453755-2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-108453755-2');
+  </script>
+</head>
+
+<body>
+  <div id="splashPage">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-toggleable-md fixed-top">
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="material-icons nav-menu">menu</i>
+      </button>
+      <a class="navbar-brand" href="#"><img src="images/splashpage/childrens-logo.png" alt="Children's Hospital"></a>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="tours.html">Tours</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Loading Bar Filler -->
+    <div class="container info">
+      <div id="loadingArea" class="row">
+        <div class="dark-text col-lg-2">
+          <h1>Loading</h1>
+        </div>
+        <div class="col-lg-10">
+          <div class="progress">
+            <div id="bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 20%">20%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row featurette">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+          <h2 class="dark-text featurette-heading">Select a Permade Tour</h2>
+          <p id="test" class="lead">Travel on one of our many permade tours.</p>
+        </div>
+        <div class="col-md-1"></div>
+      </div>
+
+      <br>
+
+      <!-- Custom Tours -->
+      <div class="row">
+        <div class="col-lg-4">
+          <a href="vrtour.html?start=p12&tour=p01p02p12b01b05b06b10b45b46b47b48b49b50b51b52b53b54b55b56a01a02a03a05a06a07a08a09a10a11a12a13a14a15a16a17">
+            <img class="rounded-circle" src="images/splashpage/inpatient_circle.JPG" alt="Oncology Patient Tour" width="140" height="140">
+          </a>
+          <h2>Oncology Patient Tour</h2>
+          <p>Tour the inpatient and outpatient centers of CBDI Liberty Campus and learn how to get to each one from the entrance.</p>
+          <!-- button type="button" class="btn btn-secondary" onClick="hideSplash()">View Tour &raquo;</button-->
+          <p><a class="btn btn-secondary" href="vrtour.html?start=p12&tour=p01p02p12b01b05b06b10b45b46b47b48b49b50b51b52b53b54b55b56a01a02a03a05a06a07a08a09a10a11a12a13a14a15a16a17" role="button">View Tour &raquo;</a></p>
+        </div><!-- /.col-lg-4 -->
+        <div class="col-lg-4">
+          <a href="vrtour.html?start=b16&tour=b06b07b08b09b10b11b12b13b14b15b16b17b18b19b20b21b22b23b24b25">
+            <img class="rounded-circle" src="images/splashpage/gantry_circle.JPG" alt="Proton Patient Tour" width="140" height="140">
+          </a>
+          <h2>Proton Patient Tour</h2>
+          <p>Travel from the entrace to the pediatric gantry.  A gantry uses a proton beam to destroy cancer cells while minimizing damage to surrounding healthy tissue and organs in a process called proton therapy.</p>
+          <p><a class="btn btn-secondary" href="vrtour.html?start=b16&tour=b06b07b08b09b10b11b12b13b14b15b16b17b18b19b20b21b22b23b24b25" role="button">View Tour &raquo;</a></p>
+        </div><!-- /.col-lg-4 -->
+        <div class="col-lg-4">
+          <a href="vrtour.html?start=b27&tour=b27b29b30b31b32b33b34b35b36b37b38b39b40b41b42b43b44">
+            <img class="rounded-circle" src="images/splashpage/cyclotron_circle.JPG" alt="Proton Research Tour" width="140" height="140">
+          </a>
+          <h2>Proton Research Tour</h2>
+          <p>Explore the cyclotron and research gantry. The research gantry is one of the only gantries in the world to be dedicated for research.</p>
+          <p><a class="btn btn-secondary" href="vrtour.html?start=b27&tour=b27b29b30b31b32b33b34b35b36b37b38b39b40b41b42b43b44" role="button">View Tour &raquo;</a></p>
+        </div><!-- /.col-lg-4 -->
+      </div><!-- /.row -->
+      <div class="row">
+          <div class="col-lg-4">
+            <a href="vrtour.html?start=p12&tour=p01p02p12b01b05b06b10b45b46b47b48b49b50b51b52b53b54b55b56a01a02a03a05a06a07a08a09a10a11a12a13a14a15a16a17">
+              <img class="rounded-circle" src="images/splashpage/inpatient_circle.JPG" alt="Oncology Patient Tour" width="140" height="140">
+            </a>
+            <h2>Oncology Patient Tour</h2>
+            <p>Tour the inpatient and outpatient centers of CBDI Liberty Campus and learn how to get to each one from the entrance.</p>
+            <!-- button type="button" class="btn btn-secondary" onClick="hideSplash()">View Tour &raquo;</button-->
+            <p><a class="btn btn-secondary" href="vrtour.html?start=p12&tour=p01p02p12b01b05b06b10b45b46b47b48b49b50b51b52b53b54b55b56a01a02a03a05a06a07a08a09a10a11a12a13a14a15a16a17" role="button">View Tour &raquo;</a></p>
+          </div><!-- /.col-lg-4 -->
+          <div class="col-lg-4">
+            <a href="vrtour.html?start=b16&tour=b06b07b08b09b10b11b12b13b14b15b16b17b18b19b20b21b22b23b24b25">
+              <img class="rounded-circle" src="images/splashpage/gantry_circle.JPG" alt="Proton Patient Tour" width="140" height="140">
+            </a>
+            <h2>Proton Patient Tour</h2>
+            <p>Travel from the entrace to the pediatric gantry.  A gantry uses a proton beam to destroy cancer cells while minimizing damage to surrounding healthy tissue and organs in a process called proton therapy.</p>
+            <p><a class="btn btn-secondary" href=".vrtour.html?start=b16&tour=b06b07b08b09b10b11b12b13b14b15b16b17b18b19b20b21b22b23b24b25" role="button">View Tour &raquo;</a></p>
+          </div><!-- /.col-lg-4 -->
+          <div class="col-lg-4">
+            <a href="vrtour.html?start=b27&tour=b27b29b30b31b32b33b34b35b36b37b38b39b40b41b42b43b44">
+              <img class="rounded-circle" src="images/splashpage/cyclotron_circle.JPG" alt="Proton Research Tour" width="140" height="140">
+            </a>
+            <h2>Proton Research Tour</h2>
+            <p>Explore the cyclotron and research gantry. The research gantry is one of the only gantries in the world to be dedicated for research.</p>
+            <p><a class="btn btn-secondary" href="vrtour.html?start=b27&tour=b27b29b30b31b32b33b34b35b36b37b38b39b40b41b42b43b44" role="button">View Tour &raquo;</a></p>
+          </div><!-- /.col-lg-4 -->
+        </div><!-- /.row -->
+
+      <hr class="featurette-divider">
+
+      
+
+      <!-- Footer -->
+      <footer>
+        <p class="float-right"><a href="#">Back to Top</a></p>
+        <p>Create a <a href="custom.html">Custom Tour</a> (For advanced users only).</p>
+      </footer>
+
+    </div><!-- /.container -->
+  </div><!-- splashpage -->
+
+   <!-- BootStrap placed at the end of the document so the pages load faster -->
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+</body>
+</html>
