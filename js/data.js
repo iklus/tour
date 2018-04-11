@@ -802,7 +802,7 @@
           "CBDI_2F_NS2": { "x": -93, "y": 0, "z": -36},
           "CBDI_2F_RoomChair": { "x": 99, "y": 0, "z": -16},
         },
-        "rotate": "-0.688 -867.343 0", "script": "There are eleven outpatient rooms.",
+        "rotate": "0 0 0", "script": "There are eleven outpatient rooms.",
       },
     
       "CBDI_2F_NS2": {
@@ -929,7 +929,7 @@
           "Main_4F_Room06Hallway": { "x": 1, "y": 0, "z": -100},
           "Main_4F_BreakRoomHallway": { "x": 0, "y": 0, "z": 100},
         },
-        "rotate": "0 0 0", "script": "Here is the nurses station.  From here the healthcare team can see the entire hallway and coordinate care for the unit.",
+        "rotate": "-0.688 -867.343 0", "script": "Here is the nurses station.  From here the healthcare team can see the entire hallway and coordinate care for the unit.",
       },
     
       "Main_4F_PlayRoom": {
