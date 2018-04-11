@@ -70,7 +70,7 @@
     <!-- Sphere entity template -->
     <script id="sphereTemplate" type="text/html">
       <a-entity id="${id}" class="sphere" position="0 -200 0" look-at="[camera]">
-        <a-entity class="collidable" position="0 0 0" geometry="primitive: sphere; radius: 4;" material="color:#CA5699"
+        <a-entity class="collidable" position="0 0 0" geometry="primitive: sphere; radius: 4;" material="color:#CA5699" visible="false"
           event-set__colorDown="_event: mousedown; material.color:#CA5699"
           event-set__colorUp="_event: mouseup; material.color: #00AAC8" 
           event-set__colorEnter="_event: mouseenter; material.color: #00AAC8"

@@ -2,9 +2,7 @@
 
 /**
  * This component sets up an event listener for every sphere that manages
- * hiding the spheres and repositioning them.  Currently it has a lot of hard
- * coded information in it like the position coordinates that I plan on moving
- * to a json file.
+ * hiding the spheres and repositioning them.  
  */
 
 
@@ -14,7 +12,7 @@ AFRAME.registerComponent('manager', {
     on: {type: 'string', default: 'click'},
     current: {type: 'string', default: 'outside_mainEntrance'},
     sky: {type: 'selector'},
-    dur: {type: 'number', default: 1000},
+    dur: {type: 'number', default: 0},
     locations: {type: 'array'},
     spheres: {type: 'array'},
     maps: {type: 'map'},
@@ -115,6 +113,10 @@ AFRAME.registerComponent('manager', {
         document.getElementById('t'+i).setAttribute('text', 'value', data.json[connect]["name"]);
       }
       i++;
+      // Change rotation
+      console.log('Rotate: ' + locationData["rotate"]);
+      var rotateCamera = function(locData) {document.getElementById('mainCamera').setAttribute('rotation', locData["rotate"])};
+      rotateCamera(locationData);
       // Switches Script
       //el.sceneEl.querySelector("#scriptBubble").setAttribute('position', { "x": 5, "y": 4.5, "z": 8});
       if(data.json[data.current]['script'] != "") {
